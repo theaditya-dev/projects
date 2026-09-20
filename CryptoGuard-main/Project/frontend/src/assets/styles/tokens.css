@@ -1,0 +1,56 @@
+/* ==========================================================================
+   Design Tokens: Premium Frosted Smoked Mirror Glass & Atmospheric Depth System
+   CryptoGuard Forensic Intelligence Platform
+   ========================================================================== */
+
+:root {
+  /* Surface Tokens (Frosted Smoked Mirror Acrylic) */
+  --glass-base: rgba(11, 18, 36, 0.85);
+  --glass-base-hover: rgba(16, 26, 50, 0.90);
+  --glass-surface-deep: rgba(7, 12, 24, 0.88);
+  --glass-surface-elevated: rgba(18, 29, 56, 0.88);
+  --glass-surface-inset: rgba(5, 9, 18, 0.75);
+
+  /* Tinted Glass Variants */
+  --glass-tint-navy: rgba(14, 24, 48, 0.85);
+  --glass-tint-cyan: rgba(10, 28, 52, 0.86);
+  --glass-tint-violet: rgba(22, 18, 48, 0.86);
+  --glass-tint-rose: rgba(36, 14, 26, 0.88);
+  --glass-tint-amber: rgba(34, 24, 12, 0.88);
+
+  /* Edge Borders & Inner Light Highlights */
+  --glass-border-subtle: rgba(255, 255, 255, 0.08);
+  --glass-border-standard: rgba(255, 255, 255, 0.13);
+  --glass-border-highlight: rgba(255, 255, 255, 0.22);
+  --glass-inner-sheen: inset 0 1px 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4);
+
+  /* Depth Shadows */
+  --glass-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--glass-border-subtle), var(--glass-inner-sheen);
+  --glass-shadow-md: 0 12px 32px -4px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--glass-border-standard), var(--glass-inner-sheen);
+  --glass-shadow-lg: 0 20px 48px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--glass-border-standard), var(--glass-inner-sheen);
+  --glass-shadow-focus: 0 24px 56px -8px rgba(6, 182, 212, 0.25), 0 0 0 1px rgba(34, 211, 238, 0.4), var(--glass-inner-sheen);
+
+  /* Blur & Saturation */
+  --glass-blur-sm: 16px;
+  --glass-blur-md: 24px;
+  --glass-blur-lg: 32px;
+  --glass-saturate: 190%;
+
+  /* Accent Color Palette */
+  --accent-cyan: #06b6d4;
+  --accent-cyan-bright: #22d3ee;
+  --accent-blue: #3b82f6;
+  --accent-blue-electric: #38bdf8;
+  --accent-violet: #8b5cf6;
+  --accent-indigo: #6366f1;
+  --accent-teal: #14b8a6;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-orange: #f97316;
+  --accent-rose: #f43f5e;
+  --accent-crimson: #e11d48;
+
+  /* Typography */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}

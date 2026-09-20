@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#040812] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden;
+    font-family: var(--font-display);
+    min-height: 100vh;
+  }
+
+  /* Custom Cyber Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(4, 8, 18, 0.95);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.25);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(34, 211, 238, 0.5);
+  }
+}
+
+@layer components {
+  /* Primary Frosted Smoked Mirror Glass Panel */
+  .glass-panel {
+    position: relative;
+    background-color: var(--glass-base);
+    backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-border-standard);
+    box-shadow: var(--glass-shadow-md);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Glass Surface with Subtle Diagonal Top Reflection */
+  .glass-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+  .glass-sheen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.35) 40%, rgba(34, 211, 238, 0.4) 60%, transparent 100%);
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Elevated Floating Glass Card */
+  .glass-card-elevated {
+    position: relative;
+    background: linear-gradient(145deg, rgba(16, 26, 52, 0.88) 0%, rgba(9, 15, 30, 0.84) 100%);
+    backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-border-standard);
+    box-shadow: var(--glass-shadow-lg);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .glass-card-elevated:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 24px 48px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.22), var(--glass-inner-sheen);
+    border-color: rgba(34, 211, 238, 0.35);
+  }
+
+  /* Tinted Glass Variants */
+  .glass-tint-navy {
+    background: linear-gradient(145deg, rgba(14, 24, 48, 0.88) 0%, rgba(8, 14, 30, 0.84) 100%);
+  }
+
+  .glass-tint-cyan {
+    background: linear-gradient(145deg, rgba(10, 30, 56, 0.88) 0%, rgba(6, 18, 36, 0.84) 100%);
+    border-color: rgba(34, 211, 238, 0.25);
+  }
+
+  .glass-tint-violet {
+    background: linear-gradient(145deg, rgba(24, 18, 52, 0.88) 0%, rgba(12, 9, 30, 0.84) 100%);
+    border-color: rgba(139, 92, 246, 0.25);
+  }
+
+  .glass-tint-rose {
+    background: linear-gradient(145deg, rgba(38, 14, 28, 0.88) 0%, rgba(20, 7, 16, 0.84) 100%);
+    border-color: rgba(244, 63, 94, 0.3);
+  }
+
+  .glass-tint-amber {
+    background: linear-gradient(145deg, rgba(36, 24, 12, 0.88) 0%, rgba(20, 13, 6, 0.84) 100%);
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+
+  /* Interactive Inset Elements */
+  .glass-inset {
+    background-color: var(--glass-surface-inset);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.6);
+  }
+
+  .glass-input {
+    @apply bg-slate-950/80 border border-white/10 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all duration-200 font-mono shadow-inner;
+  }
+}
+
+/* Print Overrides for Forensic Investigation Dossier */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
