@@ -1,0 +1,232 @@
+/* Lexify injected UI — scoped with #lexify- ids to avoid clashing with host page */
+
+#lexify-popup {
+  position: absolute;
+  z-index: 2147483647;
+  display: flex;
+  gap: 4px;
+  background: #1B1F2A;
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  animation: lx-pop-in .12s ease;
+}
+
+@keyframes lx-pop-in {
+  from { opacity: 0; transform: translateY(4px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#lexify-popup .lx-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: #C8CADC;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .12s, color .12s;
+  line-height: 1;
+}
+#lexify-popup .lx-btn:hover { background: #2E3447; color: #fff; }
+#lexify-popup .lx-btn svg {
+  width: 13px; height: 13px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+#lexify-popup .lx-save:hover { color: #8789F7; }
+
+/* ── Card ── */
+#lexify-card {
+  position: absolute;
+  z-index: 2147483647;
+  width: 320px;
+  max-width: 90vw;
+  background: #fff;
+  border: 1px solid #E2E4EF;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(13,15,26,.10), 0 12px 40px rgba(13,15,26,.10);
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  color: #0D0F1A;
+  animation: lx-pop-in .14s ease;
+  overflow: hidden;
+}
+
+#lexify-card .lx-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid #E2E4EF;
+  background: #F6F7FC;
+}
+#lexify-card .lx-card-word {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 20px;
+  color: #0D0F1A;
+}
+#lexify-card .lx-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: #A8ABBC;
+  cursor: pointer;
+  padding: 0 4px;
+}
+#lexify-card .lx-close:hover { color: #0D0F1A; }
+
+#lexify-card .lx-card-body {
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+#lexify-card .lx-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6B6F87;
+  font-size: 13px;
+  padding: 18px 14px;
+}
+#lexify-card .lx-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid #E2E4EF;
+  border-top-color: #5B5EF4;
+  border-radius: 50%;
+  animation: lx-spin .6s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes lx-spin { to { transform: rotate(360deg); } }
+
+#lexify-card .lx-error {
+  color: #DC2626;
+  font-size: 12.5px;
+  padding: 6px 0;
+  line-height: 1.6;
+}
+
+#lexify-card .lx-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+#lexify-card .lx-phonetic {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  color: #6B6F87;
+}
+#lexify-card .lx-pos, #lexify-card .lx-register {
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid #E2E4EF;
+  color: #3A3D52;
+  background: #F6F7FC;
+}
+#lexify-card .lx-register {
+  color: #5B5EF4;
+  border-color: #C4C5FB;
+  background: #EEEEFF;
+}
+
+#lexify-card .lx-section { margin-bottom: 10px; }
+#lexify-card .lx-def {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+  color: #0D0F1A;
+}
+#lexify-card .lx-def-n {
+  font-family: 'DM Serif Display', Georgia, serif;
+  color: #5B5EF4;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+#lexify-card .lx-context {
+  background: #F6F7FC;
+  border-left: 3px solid #5B5EF4;
+  border-radius: 0 6px 6px 0;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #3A3D52;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+#lexify-card .lx-synrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+#lexify-card .lx-syn {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 12px;
+  background: #F6F7FC;
+  border: 1px solid #E2E4EF;
+  color: #3A3D52;
+}
+
+#lexify-card .lx-save-full {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #5B5EF4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .12s;
+}
+#lexify-card .lx-save-full:hover { background: #4749e0; }
+#lexify-card .lx-save-full svg {
+  width: 14px; height: 14px;
+  stroke: currentColor; fill: none; stroke-width: 2;
+}
+#lexify-card .lx-save-full.lx-saved {
+  background: #16A34A;
+  cursor: default;
+}
+#lexify-card .lx-save-full.lx-saved svg { fill: currentColor; }
+
+/* ── Toast ── */
+#lexify-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #1B1F2A;
+  color: #fff;
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  z-index: 2147483647;
+  opacity: 0;
+  transition: opacity .2s, transform .2s;
+}
+#lexify-toast.lx-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

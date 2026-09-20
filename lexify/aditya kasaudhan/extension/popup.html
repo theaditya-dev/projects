@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Lexify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 300px;
+    font-family: 'DM Sans', sans-serif;
+    background: #fff;
+    color: #0D0F1A;
+  }
+  .header {
+    background: #1B1F2A;
+    padding: 16px 18px;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: #fff;
+  }
+  .logo span { color: #8789F7; }
+  .tagline { font-size: 11px; color: #8B91A8; margin-top: 2px; }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #E2E4EF;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot.ok { background: #16A34A; }
+  .dot.bad { background: #DC2626; }
+  .status-text { font-size: 12.5px; color: #3A3D52; }
+
+  .body { padding: 14px 18px; }
+  .hint { font-size: 12.5px; color: #6B6F87; line-height: 1.6; margin-bottom: 12px; }
+  .hint strong { color: #0D0F1A; }
+
+  .stat-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .stat {
+    flex: 1;
+    background: #F6F7FC;
+    border: 1px solid #E2E4EF;
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 22px; color: #0D0F1A; }
+  .stat-label { font-size: 10.5px; color: #6B6F87; margin-top: 2px; text-transform: uppercase; letter-spacing: .05em; }
+
+  .open-btn {
+    width: 100%;
+    background: #5B5EF4;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 0;
+    font-size: 13.5px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .12s;
+  }
+  .open-btn:hover { background: #4749e0; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">Lexi<span>fy</span></div>
+    <div class="tagline">Highlight any word to define it</div>
+  </div>
+
+  <div class="status-row">
+    <span class="dot" id="statusDot"></span>
+    <span class="status-text" id="statusText">Checking connection…</span>
+  </div>
+
+  <div class="body">
+    <p class="hint">Select any word or short phrase on a webpage — a small <strong>Define</strong> / <strong>Save</strong> popup will appear right where you click.</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num" id="savedCount">—</div>
+        <div class="stat-label">Saved</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="dueCount">—</div>
+        <div class="stat-label">Due today</div>
+      </div>
+    </div>
+
+    <button class="open-btn" id="openDash">Open dashboard</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

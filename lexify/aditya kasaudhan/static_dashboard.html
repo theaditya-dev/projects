@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lexify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --rail:#1B1F2A; --rail-mid:#252A38; --rail-light:#2E3447; --rail-muted:#8B91A8; --rail-dim:#555C73;
+  --canvas:#FFFFFF; --surface:#F6F7FC; --surface-2:#EDEEF6; --border:#E2E4EF;
+  --ink:#0D0F1A; --ink-mid:#3A3D52; --ink-light:#6B6F87; --ink-faint:#A8ABBC;
+  --indigo:#5B5EF4; --indigo-dim:#8789F7; --indigo-bg:#EEEEFF; --indigo-bdr:#C4C5FB;
+  --green:#16A34A; --amber:#D97706; --red:#DC2626;
+  --r:5px; --r-lg:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{display:grid;grid-template-columns:220px 1fr;grid-template-rows:auto 1fr;min-height:100vh}
+.rail{grid-row:1/-1;background:var(--rail);display:flex;flex-direction:column;overflow-y:auto}
+.rail-brand{padding:22px 20px 18px;border-bottom:1px solid var(--rail-light)}
+.brand-mark{font-family:'DM Serif Display',serif;font-size:22px;color:#fff}
+.brand-mark span{color:var(--indigo-dim)}
+.brand-tag{font-size:11px;color:var(--rail-muted);margin-top:2px}
+.rail-search{padding:14px 14px 10px;border-bottom:1px solid var(--rail-light)}
+.rail-search-inner{display:flex;align-items:center;gap:8px;background:var(--rail-light);border:1px solid var(--rail-dim);border-radius:var(--r);padding:7px 10px}
+.rail-search-inner:focus-within{border-color:var(--indigo-dim)}
+.rail-search-inner svg{width:14px;height:14px;stroke:var(--rail-muted);fill:none;stroke-width:2;flex-shrink:0}
+.rail-search-inner input{background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:#fff;width:100%}
+.rail-search-inner input::placeholder{color:var(--rail-muted)}
+.rail-section{padding:16px 0 4px}
+.rail-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--rail-dim);padding:0 20px;margin-bottom:4px}
+.rail-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:13.5px;color:var(--rail-muted);cursor:pointer;transition:background .12s,color .12s;border-left:2px solid transparent}
+.rail-item:hover{background:var(--rail-light);color:#e0e2f0}
+.rail-item.active{background:var(--rail-mid);color:#fff;border-left-color:var(--indigo-dim)}
+.rail-item svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+.rail-item .badge{margin-left:auto;font-size:10px;padding:1px 6px;border-radius:10px;background:var(--indigo);color:#fff;font-weight:600}
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:7px 20px;cursor:pointer;transition:background .1s}
+.hist-item:hover{background:var(--rail-light)}
+.hist-word{font-size:13px;color:#c8cadc;font-weight:500}
+.hist-pos{font-size:11px;color:var(--rail-dim);font-style:italic;margin-top:1px}
+.hist-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:var(--indigo-dim)}
+.rail-footer{margin-top:auto;padding:14px 16px;border-top:1px solid var(--rail-light)}
+.user-row{display:flex;align-items:center;gap:10px}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--indigo);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.user-name{font-size:13px;color:#c8cadc;font-weight:500}
+.user-plan{font-size:11px;color:var(--rail-dim)}
+.topbar{background:var(--canvas);border-bottom:1px solid var(--border);padding:0 32px;height:54px;display:flex;align-items:center;gap:12px}
+.topbar-title{font-size:14px;font-weight:500;color:var(--ink-mid)}
+.canvas{background:var(--canvas);overflow-y:auto;display:flex;flex-direction:column;padding:32px}
+
+/* Dashboard */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px}
+.metric-label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.metric-val{font-family:'DM Serif Display',serif;font-size:32px;color:var(--ink)}
+.metric-val.warn{color:var(--amber)}
+
+.section-title{font-size:16px;font-weight:500;margin-bottom:14px;font-family:'DM Serif Display',serif}
+.due-list, .saved-list{display:flex;flex-direction:column;gap:8px;margin-bottom:32px}
+.due-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px}
+.due-word{font-weight:500}
+.due-def{font-size:12.5px;color:var(--ink-light);margin-top:2px}
+.review-btns{display:flex;gap:6px}
+.review-btns button{font-size:12px;padding:5px 10px;border-radius:var(--r);border:1px solid var(--border);background:#fff;cursor:pointer;color:var(--ink-mid)}
+.review-btns button:hover{background:var(--indigo-bg);color:var(--indigo);border-color:var(--indigo-bdr)}
+.empty-msg{color:var(--ink-faint);font-size:13px;padding:12px 0}
+
+/* Word hero (lookup result) */
+.word-hero{margin-bottom:24px}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.hero-eyebrow::after{content:'';flex:1;height:1px;background:var(--indigo-bdr)}
+.hero-word{font-family:'DM Serif Display',serif;font-size:48px;line-height:1;letter-spacing:-1px;margin-bottom:10px}
+.hero-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.meta-phonetic{font-family:'DM Serif Display',serif;font-style:italic;font-size:16px;color:var(--ink-light)}
+.meta-pos,.meta-register{font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--ink-mid);background:var(--surface)}
+.meta-register{color:var(--indigo);border-color:var(--indigo-bdr);background:var(--indigo-bg)}
+.btn-save{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:7px 16px;border:1px solid var(--border);border-radius:var(--r);background:transparent;color:var(--ink-mid);cursor:pointer;font-family:inherit}
+.btn-save:hover{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-bg)}
+.btn-save svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+.def-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px}
+.def-line{display:grid;grid-template-columns:20px 1fr;gap:12px;margin-bottom:6px}
+.def-n{font-family:'DM Serif Display',serif;font-size:14px;color:var(--indigo);padding-top:2px}
+.def-text{font-size:15.5px}
+.context-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin:16px 0;font-size:14.5px;color:var(--ink-mid);line-height:1.75}
+.syn-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.syn-pill{font-size:13px;padding:5px 13px;border:1px solid var(--border);border-radius:20px;color:var(--ink-mid);background:var(--surface);cursor:pointer}
+.syn-pill:hover{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-bg)}
+.etym-card{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-top:16px}
+.etym-head{background:var(--surface);padding:10px 18px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);border-bottom:1px solid var(--border)}
+.etym-body{padding:16px 18px;font-size:14.5px;color:var(--ink-mid);line-height:1.75}
+
+.loading-state{display:flex;align-items:center;gap:12px;color:var(--ink-light);padding:30px 0}
+.loader-ring{width:24px;height:24px;border:2.5px solid var(--border);border-top-color:var(--indigo);border-radius:50%;animation:spin .65s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.saved-row{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px}
+.saved-word{font-weight:500}
+.saved-meta{font-size:12px;color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="rail">
+  <div class="rail-brand">
+    <div class="brand-mark">Lexi<span>fy</span></div>
+    <div class="brand-tag">Your words, in context</div>
+  </div>
+  <div class="rail-search">
+    <div class="rail-search-inner">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      <input id="railInput" type="text" placeholder="Look up a word…" onkeydown="if(event.key==='Enter')lookup()" autocomplete="off"/>
+    </div>
+  </div>
+  <div class="rail-section">
+    <div class="rail-label">Navigate</div>
+    <div class="rail-item active" onclick="showView('dashboard',this)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="rail-item" onclick="showView('saved',this)">
+      <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      Saved words
+    </div>
+    <div class="rail-item" onclick="showView('quiz',this)">
+      <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="8" y1="4" x2="8" y2="20"/></svg>
+      Flashcards <span class="badge" id="dueBadge">0</span>
+    </div>
+  </div>
+  <div class="rail-section">
+    <div class="rail-label">Recent</div>
+    <div class="rail-history" id="railHistory"></div>
+  </div>
+  <div class="rail-footer">
+    <div class="user-row">
+      <div class="avatar">AK</div>
+      <div><div class="user-name">Local user</div><div class="user-plan">Free plan</div></div>
+    </div>
+  </div>
+</nav>
+<div style="display:flex;flex-direction:column;min-height:100vh;overflow:hidden">
+  <header class="topbar"><span class="topbar-title" id="topbarTitle">Dashboard</span></header>
+  <div class="canvas" id="canvas"></div>
+</div>
+</div>
+
+<script>
+const API = "";
+
+async function showView(view, el) {
+  document.querySelectorAll('.rail-item').forEach(i=>i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (view === 'dashboard') return renderDashboard();
+  if (view === 'saved') return renderSaved();
+  if (view === 'quiz') return renderQuiz();
+}
+
+async function renderDashboard() {
+  document.getElementById('topbarTitle').textContent = 'Dashboard';
+  const canvas = document.getElementById('canvas');
+  canvas.innerHTML = `<div class="loading-state"><div class="loader-ring"></div> Loading stats…</div>`;
+
+  const stats = await fetch('/stats').then(r=>r.json());
+  const due = await fetch('/due-reviews').then(r=>r.json());
+
+  canvas.innerHTML = `
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Words saved</div><div class="metric-val">${stats.words_saved}</div></div>
+      <div class="metric"><div class="metric-label">Due for review</div><div class="metric-val ${stats.due_for_review>0?'warn':''}">${stats.due_for_review}</div></div>
+      <div class="metric"><div class="metric-label">Mastered</div><div class="metric-val">${stats.mastered}</div></div>
+      <div class="metric"><div class="metric-label">Total lookups</div><div class="metric-val">${stats.total_lookups}</div></div>
+    </div>
+    <div class="section-title">Due for review</div>
+    <div class="due-list" id="dueList">
+      ${due.length ? due.map(w => dueRow(w)).join('') : '<div class="empty-msg">Nothing due — save some words to start your review queue.</div>'}
+    </div>
+  `;
+}
+
+function dueRow(w) {
+  const def = (w.definition && w.definition[0]) || '';
+  return `
+    <div class="due-row" data-word="${w.word}">
+      <div>
+        <div class="due-word">${w.word}</div>
+        <div class="due-def">${def}</div>
+      </div>
+      <div class="review-btns">
+        <button onclick="reviewWord('${w.word}',2)">Forgot</button>
+        <button onclick="reviewWord('${w.word}',4)">Good</button>
+        <button onclick="reviewWord('${w.word}',5)">Easy</button>
+      </div>
+    </div>`;
+}
+
+async function reviewWord(word, quality) {
+  await fetch('/review', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({word, quality})
+  });
+  const row = document.querySelector(`.due-row[data-word="${word}"]`);
+  if (row) row.remove();
+  loadSidebarStats();
+}
+
+async function renderSaved() {
+  document.getElementById('topbarTitle').textContent = 'Saved words';
+  const canvas = document.getElementById('canvas');
+  canvas.innerHTML = `<div class="loading-state"><div class="loader-ring"></div> Loading saved words…</div>`;
+
+  const words = await fetch('/saved-words').then(r=>r.json());
+
+  canvas.innerHTML = `
+    <div class="section-title">Saved words (${words.length})</div>
+    <div class="saved-list">
+      ${words.length ? words.map(w => `
+        <div class="saved-row">
+          <div>
+            <div class="saved-word">${w.word}</div>
+            <div class="saved-meta">${w.source_title ? 'from "'+w.source_title+'"' : 'looked up in app'} · ${w.repetitions} review${w.repetitions===1?'':'s'}</div>
+          </div>
+          <span class="syn-pill" onclick="lookup('${w.word}')">Open</span>
+        </div>
+      `).join('') : '<div class="empty-msg">No saved words yet. Use the extension to highlight and save words as you read, or save from a lookup here.</div>'}
+    </div>`;
+}
+
+async function renderQuiz() {
+  document.getElementById('topbarTitle').textContent = 'Flashcards';
+  const canvas = document.getElementById('canvas');
+  const due = await fetch('/due-reviews').then(r=>r.json());
+
+  if (!due.length) {
+    canvas.innerHTML = `<div class="section-title">Flashcards</div><div class="empty-msg">Nothing due for review right now. Come back later, or save more words.</div>`;
+    return;
+  }
+
+  canvas.innerHTML = `
+    <div class="section-title">Review (${due.length} due)</div>
+    <div class="due-list">${due.map(w => dueRow(w)).join('')}</div>`;
+}
+
+async function lookup(word) {
+  word = (word || document.getElementById('railInput').value).trim().toLowerCase();
+  if (!word) return;
+  document.getElementById('railInput').value = word;
+  document.querySelectorAll('.rail-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('topbarTitle').textContent = word;
+
+  const canvas = document.getElementById('canvas');
+  canvas.innerHTML = `<div class="loading-state"><div class="loader-ring"></div> Looking up "${word}"…</div>`;
+
+  try {
+    const res = await fetch(`/lookup?word=${encodeURIComponent(word)}`);
+    const d = await res.json();
+    renderResult(d);
+    loadSidebarStats();
+  } catch(e) {
+    canvas.innerHTML = `<div class="empty-msg">Could not look up "${word}". Is the backend running?</div>`;
+  }
+}
+
+function renderResult(d) {
+  const defs = (Array.isArray(d.definitions) ? d.definitions : []).map((def, i) => {
+    const text = typeof def === 'string' ? def : (def.meaning || '');
+    return `<div class="def-line"><span class="def-n">${i+1}</span><span class="def-text">${text}</span></div>`;
+  }).join('');
+
+  const syns = (d.synonyms||[]).map(s=>`<span class="syn-pill" onclick="lookup('${s}')">${s}</span>`).join('');
+  const examples = (d.examples||[]).map(e=>`<div style="font-size:13.5px;color:var(--ink-light);font-style:italic;margin-bottom:4px">"${e}"</div>`).join('');
+
+  document.getElementById('canvas').innerHTML = `
+    <div class="word-hero">
+      <div class="hero-eyebrow">Word lookup</div>
+      <div class="hero-word">${d.word}</div>
+      <div class="hero-meta">
+        ${d.phonetic?`<span class="meta-phonetic">${d.phonetic}</span>`:''}
+        ${d.pos?`<span class="meta-pos">${d.pos}</span>`:''}
+        ${d.register?`<span class="meta-register">${d.register}</span>`:''}
+        <button class="btn-save" onclick="saveWord('${d.word}')">
+          <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Save word
+        </button>
+      </div>
+    </div>
+    <div class="def-label">Definition</div>
+    ${defs || '<div class="empty-msg">No definition found.</div>'}
+    ${examples}
+    ${d.context?`<div class="context-card">${d.context}</div>`:''}
+    ${syns?`<div class="def-label" style="margin-top:16px">Synonyms</div><div class="syn-row">${syns}</div>`:''}
+    ${d.etymology?`<div class="etym-card"><div class="etym-head">Word origin</div><div class="etym-body">${d.etymology}</div></div>`:''}
+  `;
+}
+
+async function saveWord(word) {
+  await fetch('/save-word', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({word})
+  });
+  loadSidebarStats();
+}
+
+async function loadSidebarStats() {
+  const stats = await fetch('/stats').then(r=>r.json());
+  document.getElementById('dueBadge').textContent = stats.due_for_review;
+
+  const hist = await fetch('/history').then(r=>r.json());
+  document.getElementById('railHistory').innerHTML = hist.map(h => `
+    <div class="hist-item" onclick="lookup('${h.word}')">
+      <div><div class="hist-word">${h.word}</div><div class="hist-pos">${h.pos||'—'}</div></div>
+      <span class="hist-dot"></span>
+    </div>`).join('');
+}
+
+renderDashboard();
+loadSidebarStats();
+</script>
+</body>
+</html>
